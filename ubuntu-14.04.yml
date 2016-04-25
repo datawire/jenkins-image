@@ -8,13 +8,30 @@
   - name: ensure Java 8 repo is installed
     apt_repository:
       repo: ppa:openjdk-r/ppa
-  - name: ensure brightbox repository is present for modern ruby installs
+  - name: ensure brightbox repository is present for ruby installs
     apt_repository:
-
+      repo: ppa:brightbox/ruby-ng
+      state: present
+      update_cache: yes
+  - name: ensure ruby and dependencies are installed
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - ruby2.3
+      - ruby2.3-dev
+      - zlib1g-dev
   - name: ensure deb-s3 is installed
     gem:
       name: deb-s3
       state: latest
+  - name: Fetch Jenkins 1.658 # https://github.com/geerlingguy/ansible-role-jenkins/issues/47
+    get_url:
+      url: http://pkg.jenkins-ci.org/debian/binary/jenkins_1.658_all.deb
+      dest: /tmp/jenkins_1.658_all.deb
+  - name: Install Jenkins 1.658
+    apt:
+      deb: /tmp/jenkins_1.658_all.deb
   roles:
   - role: cloudwatch
     cloudwatch_region: us-east-1
