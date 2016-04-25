@@ -1,0 +1,59 @@
+---
+# file: foundation-ubuntu.yml
+
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  pre_tasks:
+  - name: ensure Java 8 repo is installed
+    apt_repository:
+      repo: ppa:openjdk-r/ppa
+  - name: ensure brightbox repository is present for modern ruby installs
+    apt_repository:
+
+  - name: ensure deb-s3 is installed
+    gem:
+      name: deb-s3
+      state: latest
+  roles:
+  - role: cloudwatch
+    cloudwatch_region: us-east-1
+    logs:
+    - file: /var/log/syslog
+      format: "%b %d %H:%M:%S"
+      group_name: jenkins
+      stream_name: "{instance_id}-syslog"
+    - file: /var/log/kern.log
+      format: "%b %d %H:%M:%S"
+      group_name: jenkins
+      stream_name: "{instance_id}-kern.log"
+    - file: /var/log/jenkins/jenkins.log
+      format: "%b %d, %Y %I:%M:%S %p"
+      group_name: jenkins
+      stream_name: "{instance_id}-jenkins.log"
+  - role: geerlingguy.java
+    when: "ansible_os_family == 'Debian'"
+    java_packages:
+    - openjdk-8-jdk
+  - role: geerlingguy.jenkins
+    jenkins_plugins:
+    - credentials-binding
+    - git
+    - git-parameter
+    - github-api
+    - github
+    - job-dsl
+    - jobConfigHistory
+    - kubernetes
+    - parameterized-trigger
+    - shelve-project-plugin
+    - ssh
+    - swarm
+    - workflow-step-api
+    - ws-cleanup
+    - plain-credentials
+    - postbuildscript
+  - role: geerlingguy.haproxy
+    haproxy_backend_servers:
+    - name: jenkins
+      address: 127.0.0.1:8080

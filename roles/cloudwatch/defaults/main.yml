@@ -1,0 +1,8 @@
+---
+# file: cloudwatch/defaults/main.yml
+
+# The region where the AMI is being baked.
+cloudwatch_region: us-east-1
+
+# The URL of the AWS CloudWatch Logs Agent installer
+cloudwatch_logs_agent_setup_url: https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py

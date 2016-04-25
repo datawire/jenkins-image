@@ -1,0 +1,8 @@
+.directory
+bin/packer
+
+.idea
+*.iml
+
+*-variables.json
+*.log

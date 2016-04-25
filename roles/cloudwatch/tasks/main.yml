@@ -1,0 +1,24 @@
+---
+# file: cloudwatch/tasks/main.yml
+
+- name: ensure AWS cloudwatch agent installer is downloaded
+  get_url:
+    dest: /tmp/awslogs-agent-setup.py
+    url: "{{ cloudwatch_logs_agent_setup_url }}"
+
+- name: ensure base AWS cloudwatch logs configuration is setup
+  template:
+    src: awslogs.conf.j2
+    dest: /tmp/awslogs.conf
+    group: root
+    owner: root
+    mode: 0644
+
+- name: install AWS cloudwatch log agent
+  command: "python /tmp/awslogs-agent-setup.py -r {{ cloudwatch_region }} -n -c /tmp/awslogs.conf"
+
+- name: ensure the AWS cloudwatch log agent is stopped but configured to start on boot.
+  service:
+    name: awslogs
+    enabled: yes
+    state: stopped
