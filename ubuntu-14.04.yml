@@ -44,10 +44,10 @@
       format: "%b %d %H:%M:%S"
       group_name: jenkins
       stream_name: "{instance_id}-kern.log"
-#    - file: /var/log/jenkins/jenkins.log
-#      format: "%b %d %Y %I:%M:%S %p"
-#      group_name: jenkins
-#      stream_name: "{instance_id}-jenkins.log"
+    - file: /var/log/jenkins/jenkins.log
+      format: "%b %d %Y %I:%M:%S %p"
+      group_name: jenkins
+      stream_name: "{instance_id}-jenkins.log"
   - role: geerlingguy.java
     when: "ansible_os_family == 'Debian'"
     java_packages:
