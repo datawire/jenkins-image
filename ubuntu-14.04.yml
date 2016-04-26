@@ -64,6 +64,7 @@
     - kubernetes
     - parameterized-trigger
     - shelve-project-plugin
+    - slack
     - ssh
     - swarm
     - workflow-step-api
