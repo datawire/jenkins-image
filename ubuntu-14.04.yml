@@ -55,6 +55,7 @@
   - role: geerlingguy.jenkins
     jenkins_plugins:
     - credentials-binding
+    - envinject
     - git
     - git-parameter
     - github-api
@@ -67,7 +68,6 @@
     - slack
     - ssh
     - swarm
-    - workflow-step-api
     - ws-cleanup
     - plain-credentials
     - postbuildscript
