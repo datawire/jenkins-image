@@ -19,6 +19,7 @@
       state: latest
     with_items:
       - git
+      - ntp
       - ruby2.3
       - ruby2.3-dev
       - zlib1g-dev
@@ -33,6 +34,8 @@
   - name: Install Jenkins 1.658
     apt:
       deb: /tmp/jenkins_1.658_all.deb
+  - name: ensure ca stores for java are updated
+    command: update-ca-certificates -f
   roles:
   - role: cloud-init
   - role: cloudwatch
@@ -73,6 +76,7 @@
     - ws-cleanup
     - plain-credentials
     - postbuildscript
+    - s3
   - role: geerlingguy.haproxy
     haproxy_backend_servers:
     - name: jenkins
