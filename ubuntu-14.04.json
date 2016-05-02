@@ -3,7 +3,8 @@
     "branch": null,
     "build_number": null,
     "builder": null,
-    "commit": null
+    "commit": null,
+    "force_deregister": "false"
   },
   "builders": [
     {
@@ -20,7 +21,7 @@
           "delete_on_termination": true
         }
       ],
-      "force_deregister": true,
+      "force_deregister": "{{ user `force_deregister` }}",
       "region": "us-east-1",
       "run_tags": {
         "Branch": "{{ user `branch` }}",
