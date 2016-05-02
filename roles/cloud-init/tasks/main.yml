@@ -1,0 +1,10 @@
+---
+# file: cloud-init/files/cloud-init.sh
+
+- name: ensure cloud-init script is installed
+  copy:
+    src: cloud-init.sh
+    dest: /opt/cloud-init.sh
+    group: root
+    owner: root
+    mode: 0755

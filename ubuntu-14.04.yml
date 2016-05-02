@@ -13,11 +13,12 @@
       repo: ppa:brightbox/ruby-ng
       state: present
       update_cache: yes
-  - name: ensure ruby and dependencies are installed
+  - name: ensure necessary system dependencies are installed
     apt:
       name: "{{ item }}"
       state: latest
     with_items:
+      - git
       - ruby2.3
       - ruby2.3-dev
       - zlib1g-dev
@@ -33,6 +34,7 @@
     apt:
       deb: /tmp/jenkins_1.658_all.deb
   roles:
+  - role: cloud-init
   - role: cloudwatch
     cloudwatch_region: us-east-1
     logs:
