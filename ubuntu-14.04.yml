@@ -19,6 +19,7 @@
       state: latest
     with_items:
       - git
+      - jq
       - ntp
       - ruby2.3
       - ruby2.3-dev
