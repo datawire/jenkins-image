@@ -18,3 +18,19 @@ set -e
 arw_msg() {
   printf "%s\n" "--> $1"
 }
+
+is_baked() {
+  commit_hash=${1:?Commit hash not specified}
+  result=""
+
+  if [ "$commit_hash" != "unknown" ]; then
+    result=$(aws ec2 describe-images \
+             --owner self \
+             --filters Name=tag:Commit,Values=${commit_hash} \
+             --region us-east-1 \
+             --query 'Images[*].ImageId' \
+             --output text)
+  fi
+
+  printf "${result}"
+}

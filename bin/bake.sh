@@ -39,15 +39,18 @@ fi
 
 build_number=0
 builder="unknown"
+branch="unknown"
 commit="unknown"
 
 if [ "$is_jenkins" = "true" ]; then
     arw_msg "Running on Jenkins CI"
+    branch="${GIT_BRANCH:?Running on Jenkins CI, but GIT_BRANCH is not set}"
     build_number="${BUILD_NUMBER:?Running on Jenkins CI, but BUILD_NUMBER is not set}"
     builder=jenkins
     commit="${GIT_COMMIT:?Running on Jenkins CI, but GIT_COMMIT is not set}"
 elif [ "$is_travis" = "true" ]; then
     arw_msg "Running on Travis CI"
+    branch="${TRAVIS_BRANCH:?Running on ravis CI, but TRAVIS_BRANCH is not set}"
     build_number="${TRAVIS_BUILD_NUMBER:?Running on Travis CI, but TRAVIS_BUILD_NUMBER is not set}"
     builder=travis
     commit="${TRAVIS_COMMIT:?Running on Travis CI, but TRAVIS_COMMIT is not set}"
@@ -55,8 +58,15 @@ else
     arw_msg "Running on unidentified build machine!"
 fi
 
+existing_ami_id="$(is_baked ${commit})"
+if [ "$existing_ami_id" != "" ]; then
+    arw_msg "AMI exists with same Git commit hash; Skipping bake (AMI: ${existing_ami_id})"
+    exit 0
+fi
+
 cat << EOF > "$packer_variables_file"
 {
+  "branch": "${branch#*/}",
   "build_number": "${build_number}",
   "builder": "${builder}",
   "commit": "${commit}"

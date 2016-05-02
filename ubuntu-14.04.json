@@ -1,5 +1,6 @@
 {
   "variables": {
+    "branch": null,
     "build_number": null,
     "builder": null,
     "commit": null
@@ -22,6 +23,7 @@
       "force_deregister": true,
       "region": "us-east-1",
       "run_tags": {
+        "Branch": "{{ user `branch` }}",
         "Build": "{{ user `build_number` }}",
         "Builder": "{{ user `builder` }}",
         "Commit": "{{ user `commit` }}",
@@ -31,6 +33,7 @@
       "source_ami": "ami-52e6fe38",
       "ssh_username": "ubuntu",
       "tags": {
+        "Branch": "{{ user `branch` }}",
         "Build": "{{ user `build_number` }}",
         "Builder": "{{ user `builder` }}",
         "Commit": "{{ user `commit` }}",
