@@ -19,6 +19,7 @@ set -u
 BIN_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 . ${BIN_PATH}/functions.sh
 
+force_build="${FORCE_BUILD:=false}"
 is_jenkins="${JENKINS:=false}"
 is_travis="${TRAVIS:=false}"
 packer_exec="${PACKER_EXEC:=bin/packer}"
@@ -59,7 +60,7 @@ else
 fi
 
 existing_ami_id="$(is_baked ${commit})"
-if [ "$existing_ami_id" != "" ]; then
+if [ "$force_build" != "true" ] && [ "$existing_ami_id" != "" ]; then
     arw_msg "AMI exists with same Git commit hash; Skipping bake (AMI: ${existing_ami_id})"
     exit 0
 fi
@@ -69,7 +70,8 @@ cat << EOF > "$packer_variables_file"
   "branch": "${branch#*/}",
   "build_number": "${build_number}",
   "builder": "${builder}",
-  "commit": "${commit}"
+  "commit": "${commit}",
+  "force_deregister": "${force_build}"
 }
 EOF
 
